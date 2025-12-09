@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threads 宣布大賽 Collection</title>
+    <style>
+        :root {
+            --app-bg: #f5f5f7;
+            --glass-material: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-hover: rgba(255, 255, 255, 1);
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #007aff;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --radius-window: 24px;
+            --radius-card: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 20%, #E0C3FC 40%, #8EC5FC 100%);
+            background-attachment: fixed;
+            background-size: 200% 200%;
+            animation: gradientMove 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-main);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Main Window Container */
+        .window-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            background: var(--glass-material);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-window);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Toolbar / Header */
+        .toolbar {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+
+        .traffic-lights {
+            display: flex;
+            gap: 8px;
+            width: 100px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.red { background: #ff5f57; border: 1px solid #e0443e; }
+        .dot.yellow { background: #febc2e; border: 1px solid #dba522; }
+        .dot.green { background: #28c840; border: 1px solid #1aab29; }
+
+        .window-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-main);
+            opacity: 0.9;
+        }
+
+        .search-container {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 6px 10px 6px 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.5);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            background: #fff;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0,122,255,0.1);
+        }
+
+        /* Content Grid */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card Style */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
+            min-height: 160px;
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.01);
+            background: var(--card-hover);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        .card-badge {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-badge::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+        }
+
+        .card-title {
+            font-size: 17px;
+            line-height: 1.5;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Highlight the text inside 《 》 */
+        .highlight {
+            background: -webkit-linear-gradient(45deg, #007aff, #00c6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .open-btn {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-color);
+            background: rgba(0,122,255,0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+
+        .card:hover .open-btn {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        /* Scrollbar customization */
+        .content-area::-webkit-scrollbar {
+            width: 10px;
+        }
+        .content-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .content-area::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 10px;
+            border: 3px solid transparent;
+            background-clip: content-box;
+        }
+        .content-area::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 0 16px;
+            }
+            .window-title {
+                display: none;
+            }
+            .content-area {
+                padding: 16px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="window-container">
+        <!-- macOS Style Header -->
+        <header class="toolbar">
+            <div class="traffic-lights">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="window-title">Threads 第一屆大賽 Collection</div>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search topics...">
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <div class="grid" id="cardGrid">
+                <!-- Cards will be injected here by JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Data from JSON
+        const threadsData = [
+            { "title": "我自行宣布，第一屆《身為醫生、醫護人員遇過的最奇葩病人》大賽，正式開始", "URL": "https://www.threads.com/@kai__1214/post/DRMexYEge1B" },
+            { "title": "我自行宣布，第一屆《最肥美家寵》大賽，正式開始", "URL": "https://www.threads.com/@long.zing.ki.xi/post/DQTnG7riYKm" },
+            { "title": "我自行宣布，第一屆《這個男優太誇張了》大賽，正式開始", "URL": "https://www.threads.com/@loveintheblanket/post/DQ5xFCujwt3" },
+            { "title": "我自行宣布，第一屆《最難訂位餐廳》大賽，正式開始", "URL": "https://www.threads.com/@inline.app/post/DQ_H9i8j0of" },
+            { "title": "我自行宣布，第一屆《 Threads 最欠揍的另一半》大賽，正式開始", "URL": "https://www.threads.com/@jily234.10/post/DQyx2WNEq2o" },
+            { "title": "我自行宣布，第一屆《失敗攝影展》大賽，正式開始", "URL": "https://www.threads.com/@geomosa/post/DQOXgG1kn4Y" },
+            { "title": "我自行宣布，第一屆《與另一半年紀差最多歲的》大賽，正式開始", "URL": "https://www.threads.com/@x_chien_614/post/DQtZHNiEu3W" },
+            { "title": "我自行宣布，第一屆《做過最毀三觀的事》大賽，正式開始", "URL": "https://www.threads.com/@_tl.stallone/post/DRGYPH3kqve" },
+            { "title": "我自行宣布，第一屆《 Threads 好市多必買》大賽，正式開始", "URL": "https://www.threads.com/@bomi.zzz1015/post/DQT4v2FEX1i" },
+            { "title": "我自行宣布，第一屆《 Threads 史上最正女友/老婆 》大賽，正式開始", "URL": "https://www.threads.com/@gaopei_/post/DQJu5p2knx3" },
+            { "title": "我自行宣布，第一屆《學生時期做過最猛的事》大賽，正式開始", "URL": "https://www.threads.com/@kzh._03_27/post/DRhHdZekvdT" },
+            { "title": "我自行宣布，第一屆《親眼見證壞親戚終於有報應了》大賽，正式開始", "URL": "https://www.threads.com/@black_cherry_so_juicy/post/DRTbQdtAbKy" },
+            { "title": "我自行宣布，第一屆《寵男朋友》大賽，正式開始", "URL": "https://www.threads.com/@yzf_.9791/post/DRyOJ3YD5i5" },
+            { "title": "我自行宣布，第一屆《醉後做過最瞎的事情》大賽，正式開始", "URL": "https://www.threads.com/@foxy_001010/post/DQZN4-YAUUN" },
+            { "title": "我自行宣布，第一屆《最爛前女友、前男友事蹟》大賽，正式開始", "URL": "https://www.threads.com/@xin_baseball/post/DQ1iN3dkv2q" },
+            { "title": "我自行宣布，第一屆《最難走出來、看不膩的陸劇》大賽，正式開始", "URL": "https://www.threads.com/@summer_06050513/post/DQsZ3ZKki51" },
+            { "title": "我自行宣布，第一屆《 Threads 史上覺得最無感的醫美項目》大賽，正式開始", "URL": "https://www.threads.com/@1028._.bpmwf/post/DQbr9SOjmcH" },
+            { "title": "我自行宣布，第一屆《 Threads 史上必看BL小說》大賽，正式開始", "URL": "https://www.threads.com/@blstory1123/post/DQRx8nPARSV" },
+            { "title": "我自行宣布，第一屆《國中做過最變態的事》大賽，正式開始", "URL": "https://www.threads.com/@ysziu001/post/DQ9Y3aIknfX" },
+            { "title": "我自行宣布，第一屆《朋友最搞笑照片》大賽，正式開始", "URL": "https://www.threads.com/@7_zuatvo/post/DQq2gqvkWyI" },
+            { "title": "我自行宣布，第一屆《對於女生痛經緩解辦法》大賽，正式開始", "URL": "https://www.threads.com/@xqzlovewzk.0725/post/DRrrUoakloH" },
+            { "title": "我自行宣布，第一屆《 Threads 創業賠多少錢》大賽，正式開始", "URL": "https://www.threads.com/@kimhung.life/post/DQMJ8alD8bD" },
+            { "title": "我自行宣布，第一屆《 Threads 史上最好看腳底板》大賽，正式開始", "URL": "https://www.threads.com/@yuan_yuan1126/post/DQQZFdAD9sz" },
+            { "title": "我自行宣布，第一屆《 Threads 分享自己最喜歡台中咖啡廳》大賽，正式開始", "URL": "https://www.threads.com/@minty28_/post/DQQRw2eE9Tk" },
+            { "title": "我自行宣布，第一屆《我堅持了至少十年的事情》大賽，正式開始", "URL": "https://www.threads.com/@okok0753/post/DRmrBshE4A4" },
+            { "title": "我自行宣布，第一屆《 Threads 史上最棒最用心的求婚》大賽，正式開始", "URL": "https://www.threads.com/@annieliiee/post/DQcNfVdj6Wh" },
+            { "title": "我自行宣布，第一屆《好公司/好職缺比賽》大賽，正式開始", "URL": "https://www.threads.com/@shi_cia_1011/post/DQTW95NCZJo" },
+            { "title": "我自行宣布，第一屆《父母荒唐事》大賽，正式開始", "URL": "https://www.threads.com/@long.zing.ki.xi/post/DQULUhfiXq9" },
+            { "title": "我自行宣布，第一屆《男朋友最雷》大賽，正式開始", "URL": "https://www.threads.com/@___y.623/post/DQv7jbaiamU" },
+            { "title": "我自行宣布，第一屆《 CK 內衣》大賽，正式開始", "URL": "https://www.threads.com/@xcute.kaohsiung/post/DRFhjgwE70A" },
+            { "title": "我自行宣布，第一屆《 Threads 台南美食推薦》大賽，正式開始", "URL": "https://www.threads.com/@__czn__/post/DQTRdxEk5eC" },
+            { "title": "我自行宣布，第一屆《緩解偏頭痛》大賽，正式開始", "URL": "https://www.threads.com/@serenasarea/post/DRRYHZLE34o" },
+            { "title": "我自行宣布，第一屆《女朋友幫男朋友拍照》大賽，正式開始", "URL": "https://www.threads.com/@houseof886.us/post/DRP34lUkhhE" },
+            { "title": "我自行宣布，第一屆《這輩子必須要看過的電影》大賽，正式開始", "URL": "https://www.threads.com/@xyu._14/post/DQuBUEOkrtc" },
+            { "title": "我自行宣布，第一屆《 Threads 童顏巨乳的小隻馬女生》大賽，正式開始", "URL": "https://www.threads.com/@tyu_0318/post/DQiSknOkkLM" },
+            { "title": "我自行宣布，第一屆《高中生一定要知道的資源》大賽，正式開始", "URL": "https://www.threads.com/@mta.2024.0405/post/DRIpBa4Cn-Z" },
+            { "title": "我自行宣布，第一屆《實用可一次買斷 App 》大賽，正式開始", "URL": "https://www.threads.com/@eting15/post/DRfGQf2DwO5" },
+            { "title": "我自行宣布，第一屆《優美到不可思議的一段文字》大賽，正式開始", "URL": "https://www.threads.com/@dfibjdgzr/post/DRlmf_UgZuJ" },
+            { "title": "我自行宣布，第一屆《送外國人絕不會失敗的台灣小物》大賽，正式開始", "URL": "https://www.threads.com/@designintaiwan/post/DQ9ZG_lDxpc" },
+            { "title": "我自行宣布，第一屆《那些年你聽錯的歌詞》大賽，正式開始", "URL": "https://www.threads.com/@xxft_y/post/DRR9npEktbl" },
+            { "title": "我自行宣布，第一屆《偷情者最狂的偷情故事》大賽，正式開始", "URL": "https://www.threads.com/@double.chin411/post/DQx3t90gUmd" },
+            { "title": "我自行宣布，第一屆《 2025 看完最好看的書》大賽，正式開始", "URL": "https://www.threads.com/@thetipsyheartbookclub/post/DRwKyarEe7L" },
+            { "title": "我自行宣布，第一屆《 2025 年讀到最喜歡的書》大賽，正式開始", "URL": "https://www.threads.com/@mindfulness_wan/post/DRdz50aAY0k" },
+            { "title": "我自行宣布，第一屆《爆幹準的算命老師》大賽，正式開始", "URL": "https://www.threads.com/@orbit.11_/post/DQWuVO6E3bb" },
+            { "title": "我自行宣布，第一屆《 Threads 生活智慧王》大賽，正式開始", "URL": "https://www.threads.com/@xienuonuo1203/post/DQGNMEZEoHX" },
+            { "title": "我自行宣布，第一屆《 40 歲以上給 30 歲建議》大賽，正式開始", "URL": "https://www.threads.com/@wei88988/post/DQ5Yki3EqtZ" },
+            { "title": "我自行宣布，第一屆《 Threads 史上第一屆未爆出的公司秘密秘》大賽，正式開始", "URL": "https://www.threads.com/@mini826165/post/DQYV0vCEmzn" },
+            { "title": "我自行宣布，第一屆《疼老婆》大賽，正式開始", "URL": "https://www.threads.com/@ra27x45/post/DRPWOiNE5u6" },
+            { "title": "我自行宣布，第一屆《手控代表》大賽，正式開始", "URL": "https://www.threads.com/@winni.1014/post/DQg1td4kmkY" },
+            { "title": "我自行宣布，第一屆《 Threads 史上最扯暈船故事 》大賽，正式開始", "URL": "https://www.threads.com/@kubiiio_0/post/DQMISTxih-N" },
+            { "title": "我自行宣布，第一屆《我用 Gemini 3 做的酷東西》大賽，正式開始", "URL": "https://www.threads.com/@id30919/post/DRSgiHcEmH4" },
+            { "title": "我自行宣布，第一屆《 Threads 推薦人生必看的書》大賽，正式開始", "URL": "https://www.threads.com/@miartist_studio/post/DQNsOBMEmeM" },
+            { "title": "我自行宣布，第一屆《挑選男朋友一定會觀察的一個點》大賽，正式開始", "URL": "https://www.threads.com/@recolond/post/DQ34wM8EZQr" },
+            { "title": "我自行宣布，第一屆《朋友送過最棒的生日禮物》大賽，正式開始", "URL": "https://www.threads.com/@__900521/post/DRgNoqNEnVA" },
+            { "title": "我自行宣布，第一屆《很努力但需要被關注的帳號》大賽，正式開始", "URL": "https://www.threads.com/@zn_tat2/post/DRRyj38D-zv" },
+            { "title": "我自行宣布，第一屆《不小心做過超沒禮貌的事情》大賽，正式開始", "URL": "https://www.threads.com/@sak_9322/post/DRRlVgakmNC" },
+            { "title": "我自行宣布，第一屆《這輩子必須要看過的人生書籍》大賽，正式開始", "URL": "https://www.threads.com/@ninjatofuture/post/DQxdVGPEzr-" },
+            { "title": "我自行宣布，第一屆《吃過最好吃的草莓蛋糕》大賽，正式開始", "URL": "https://www.threads.com/@pauline.zheng/post/DR7ZVipgYfi" },
+            { "title": "我自行宣布，第一屆《做過最毀三觀的事》大賽，正式開始", "URL": "https://www.threads.com/@_tl.stallone/post/DRGYPH3kqve" },
+            { "title": "我自行宣布，第一屆《 Threads 史上最棒最貼心男友》大賽，正式開始", "URL": "https://www.threads.com/@hz_9x9/post/DQMjcbpEuJm" },
+            { "title": "我自行宣布，第一屆《這輩子必須要看的謎片》大賽，正式開始", "URL": "https://www.threads.com/@kobeben24/post/DQyP5jgEZs-" },
+            { "title": "我自行宣布，第一屆《人生必看的電影》大賽，正式開始", "URL": "https://www.threads.com/@gaopei_/post/DQ0cuZLkp9v" },
+            { "title": "我自行宣布，第一屆《那些聽完會改變你人生的 Podcast 》大賽，正式開始", "URL": "https://www.threads.com/@haissa.wang/post/DRa-37sk7AW" },
+            { "title": "我自行宣布，第一屆《跟男生出去遇過最大的 Red Flag 是什麼》大賽，正式開始", "URL": "https://www.threads.com/@kk_krystalllllll/post/DRT3ZP2kZfx" },
+            { "title": "我自行宣布，第一屆《寵老婆》大賽，正式開始", "URL": "https://www.threads.com/@sabina_ch211/post/DR33-aEkY5d" },
+            { "title": "我自行宣布，第一屆《寵男朋友》大賽，正式開始", "URL": "https://www.threads.com/@yzf_.9791/post/DRyOJ3YD5i5" }
+        ];
+
+        const grid = document.getElementById('cardGrid');
+        const searchInput = document.getElementById('searchInput');
+
+        // Function to extract text within brackets 《...》 to highlight it
+        function formatTitle(title) {
+            // Regex to find content inside 《 and 》
+            const regex = /(《.*?》)/g;
+            // Replace with span
+            return title.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // Render functions
+        function renderCards(data) {
+            grid.innerHTML = '';
+            data.forEach(item => {
+                const card = document.createElement('a');
+                card.className = 'card';
+                card.href = item.URL;
+                card.target = '_blank'; // Open in new tab
+
+                card.innerHTML = `
+                    <div>
+                        <div class="card-badge">Threads Contest</div>
+                        <div class="card-title">${formatTitle(item.title)}</div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="open-btn">View Thread</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initial render
+        renderCards(threadsData);
+
+        // Search Functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredData = threadsData.filter(item => 
+                item.title.toLowerCase().includes(searchTerm)
+            );
+            renderCards(filteredData);
+        });
+    </script>
+</body>
+</html>
