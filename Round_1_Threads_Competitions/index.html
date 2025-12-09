@@ -9,15 +9,15 @@
             --app-bg: #f5f5f7;
             --glass-material: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.5);
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --card-hover: rgba(255, 255, 255, 1);
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-hover: rgba(255, 255, 255, 0.95);
             --text-main: #1d1d1f;
             --text-secondary: #86868b;
             --accent-color: #007aff;
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
             --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
             --radius-window: 24px;
-            --radius-card: 16px;
+            --radius-card: 18px;
         }
 
         * {
@@ -29,10 +29,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 20%, #E0C3FC 40%, #8EC5FC 100%);
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
             background-attachment: fixed;
-            background-size: 200% 200%;
-            animation: gradientMove 15s ease infinite;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -41,16 +39,10 @@
             color: var(--text-main);
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         /* Main Window Container */
         .window-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px; /* Reduced width slightly for single column focus */
             height: 90vh;
             background: var(--glass-material);
             backdrop-filter: blur(40px);
@@ -72,13 +64,15 @@
             justify-content: space-between;
             padding: 0 24px;
             border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.3);
             flex-shrink: 0;
+            z-index: 10;
         }
 
         .traffic-lights {
             display: flex;
             gap: 8px;
-            width: 100px;
+            width: 80px;
         }
 
         .dot {
@@ -92,14 +86,15 @@
 
         .window-title {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 24px;
             color: var(--text-main);
-            opacity: 0.9;
+            opacity: 0.8;
+            letter-spacing: -0.3px;
         }
 
         .search-container {
             position: relative;
-            width: 250px;
+            width: 220px;
         }
 
         .search-icon {
@@ -108,15 +103,15 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .search-input {
             width: 100%;
-            padding: 6px 10px 6px 32px;
+            padding: 7px 10px 7px 30px;
             border-radius: 8px;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.4);
             font-size: 13px;
             outline: none;
             transition: all 0.2s;
@@ -124,108 +119,118 @@
 
         .search-input:focus {
             background: #fff;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0,122,255,0.1);
+            box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
         }
 
-        /* Content Grid */
+        /* Content Area */
         .content-area {
             flex: 1;
             overflow-y: auto;
-            padding: 30px;
+            padding: 30px 20px;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
+        /*
+           SINGLE COLUMN LAYOUT MODIFICATION
+           使用 Flex column 並置中
+        */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 水平置中子元素 */
+            gap: 16px;
+            width: 100%;
         }
 
-        /* Card Style */
+        /* Card Style - List View Optimized */
         .card {
             background: var(--card-bg);
             border-radius: var(--radius-card);
-            padding: 24px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 20px 24px;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
             text-decoration: none;
             color: inherit;
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            border: 1px solid rgba(255,255,255,0.6);
-            position: relative;
-            min-height: 160px;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.4);
+
+            /* Layout Dimensions for Single Column */
+            width: 100%;
+            max-width: 640px; /* 限制最大寬度，保持閱讀舒適 */
         }
 
         .card:hover {
-            transform: translateY(-4px) scale(1.01);
+            transform: scale(1.01);
             background: var(--card-hover);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-color: rgba(255,255,255,0.8);
+        }
+
+        .card-content {
+            flex: 1;
+            padding-right: 20px;
         }
 
         .card-badge {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             color: var(--text-secondary);
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .card-badge::before {
             content: '';
             display: block;
-            width: 6px;
-            height: 6px;
-            background: var(--text-secondary);
+            width: 5px;
+            height: 5px;
+            background: var(--accent-color);
             border-radius: 50%;
         }
 
         .card-title {
-            font-size: 17px;
+            font-size: 16px;
             line-height: 1.5;
             font-weight: 500;
             color: #333;
-            margin-bottom: 20px;
         }
 
         /* Highlight the text inside 《 》 */
         .highlight {
-            background: -webkit-linear-gradient(45deg, #007aff, #00c6ff);
+            background: -webkit-linear-gradient(90deg, #007aff, #5ac8fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
         }
 
-        .card-footer {
-            margin-top: auto;
+        .card-action {
+            flex-shrink: 0;
+        }
+
+        .open-icon {
             display: flex;
-            justify-content: flex-end;
             align-items: center;
-        }
-
-        .open-btn {
-            font-size: 13px;
-            font-weight: 600;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,122,255,0.08);
             color: var(--accent-color);
-            background: rgba(0,122,255,0.1);
-            padding: 6px 14px;
-            border-radius: 20px;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
-        .card:hover .open-btn {
+        .card:hover .open-icon {
             background: var(--accent-color);
             color: #fff;
         }
 
-        /* Scrollbar customization */
+        /* Custom Scrollbar */
         .content-area::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         .content-area::-webkit-scrollbar-track {
             background: transparent;
@@ -233,25 +238,34 @@
         .content-area::-webkit-scrollbar-thumb {
             background-color: rgba(0,0,0,0.1);
             border-radius: 10px;
-            border: 3px solid transparent;
-            background-clip: content-box;
         }
         .content-area::-webkit-scrollbar-thumb:hover {
             background-color: rgba(0,0,0,0.2);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
+            .window-container {
+                border-radius: 0;
+                height: 100vh;
+            }
             .toolbar {
                 padding: 0 16px;
             }
             .window-title {
                 display: none;
             }
-            .content-area {
+            .card {
                 padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
             }
-            .grid {
-                grid-template-columns: 1fr;
+            .card-action {
+                align-self: flex-end;
+            }
+            .open-icon {
+                width: 32px;
+                height: 32px;
             }
         }
     </style>
@@ -259,30 +273,30 @@
 <body>
 
     <div class="window-container">
-        <!-- macOS Style Header -->
+        <!-- Header -->
         <header class="toolbar">
             <div class="traffic-lights">
                 <div class="dot red"></div>
                 <div class="dot yellow"></div>
                 <div class="dot green"></div>
             </div>
-            <div class="window-title">Threads 第一屆大賽 Collection</div>
+            <div class="window-title">花式各種《自行宣布的 Threads 第一屆大賽》</div>
             <div class="search-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" class="search-input" placeholder="Search topics...">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜尋主題...">
             </div>
         </header>
 
         <!-- Content Area -->
         <main class="content-area">
-            <div class="grid" id="cardGrid">
-                <!-- Cards will be injected here by JS -->
+            <div class="list-container" id="cardList">
+                <!-- List Items will be injected here -->
             </div>
         </main>
     </div>
 
     <script>
-        // Data from JSON
+        // Data
         const threadsData = [
             { "title": "我自行宣布，第一屆《身為醫生、醫護人員遇過的最奇葩病人》大賽，正式開始", "URL": "https://www.threads.com/@kai__1214/post/DRMexYEge1B" },
             { "title": "我自行宣布，第一屆《最肥美家寵》大賽，正式開始", "URL": "https://www.threads.com/@long.zing.ki.xi/post/DQTnG7riYKm" },
@@ -301,7 +315,7 @@
             { "title": "我自行宣布，第一屆《最爛前女友、前男友事蹟》大賽，正式開始", "URL": "https://www.threads.com/@xin_baseball/post/DQ1iN3dkv2q" },
             { "title": "我自行宣布，第一屆《最難走出來、看不膩的陸劇》大賽，正式開始", "URL": "https://www.threads.com/@summer_06050513/post/DQsZ3ZKki51" },
             { "title": "我自行宣布，第一屆《 Threads 史上覺得最無感的醫美項目》大賽，正式開始", "URL": "https://www.threads.com/@1028._.bpmwf/post/DQbr9SOjmcH" },
-            { "title": "我自行宣布，第一屆《 Threads 史上必看BL小說》大賽，正式開始", "URL": "https://www.threads.com/@blstory1123/post/DQRx8nPARSV" },
+            { "title": "我自行宣布，第一屆《 Threads 史上必看 BL 小說》大賽，正式開始", "URL": "https://www.threads.com/@blstory1123/post/DQRx8nPARSV" },
             { "title": "我自行宣布，第一屆《國中做過最變態的事》大賽，正式開始", "URL": "https://www.threads.com/@ysziu001/post/DQ9Y3aIknfX" },
             { "title": "我自行宣布，第一屆《朋友最搞笑照片》大賽，正式開始", "URL": "https://www.threads.com/@7_zuatvo/post/DQq2gqvkWyI" },
             { "title": "我自行宣布，第一屆《對於女生痛經緩解辦法》大賽，正式開始", "URL": "https://www.threads.com/@xqzlovewzk.0725/post/DRrrUoakloH" },
@@ -352,46 +366,44 @@
             { "title": "我自行宣布，第一屆《寵男朋友》大賽，正式開始", "URL": "https://www.threads.com/@yzf_.9791/post/DRyOJ3YD5i5" }
         ];
 
-        const grid = document.getElementById('cardGrid');
+        const listContainer = document.getElementById('cardList');
         const searchInput = document.getElementById('searchInput');
 
-        // Function to extract text within brackets 《...》 to highlight it
         function formatTitle(title) {
-            // Regex to find content inside 《 and 》
             const regex = /(《.*?》)/g;
-            // Replace with span
             return title.replace(regex, '<span class="highlight">$1</span>');
         }
 
-        // Render functions
         function renderCards(data) {
-            grid.innerHTML = '';
+            listContainer.innerHTML = '';
             data.forEach(item => {
                 const card = document.createElement('a');
                 card.className = 'card';
                 card.href = item.URL;
-                card.target = '_blank'; // Open in new tab
+                card.target = '_blank';
 
                 card.innerHTML = `
-                    <div>
-                        <div class="card-badge">Threads Contest</div>
+                    <div class="card-content">
+                        <div class="card-badge">Threads Event</div>
                         <div class="card-title">${formatTitle(item.title)}</div>
                     </div>
-                    <div class="card-footer">
-                        <span class="open-btn">View Thread</span>
+                    <div class="card-action">
+                        <div class="open-icon">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
                     </div>
                 `;
-                grid.appendChild(card);
+                listContainer.appendChild(card);
             });
         }
 
-        // Initial render
         renderCards(threadsData);
 
-        // Search Functionality
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
-            const filteredData = threadsData.filter(item => 
+            const filteredData = threadsData.filter(item =>
                 item.title.toLowerCase().includes(searchTerm)
             );
             renderCards(filteredData);
