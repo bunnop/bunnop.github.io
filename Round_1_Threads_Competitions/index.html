@@ -5,15 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>脆 (Threads) 第一屆大賽薈萃</title>
     <style>
+        /* 1. Define Light Mode (Default) Variables */
         :root {
-            --bg-color: #050505;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --accent-color: #00d2ff;
-            --accent-glow: rgba(0, 210, 255, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --search-bg: rgba(20, 20, 20, 0.8);
+            --bg-color: #f4f6f9;
+            --bg-gradient-1: rgba(0, 100, 255, 0.05);
+            --bg-gradient-2: rgba(0, 200, 255, 0.08);
+
+            --card-bg: #ffffff;
+            --card-border: #e1e4e8;
+            --card-hover-bg: #f8f9fa;
+
+            --header-bg: #ffffff;
+            --header-border: #e1e4e8;
+            --header-hover: #f1f3f5;
+
+            --accent-color: #0066cc; /* Professional Blue */
+            --accent-glow: rgba(0, 102, 204, 0.15);
+
+            --text-primary: #1a1b1e;
+            --text-secondary: #5f6368;
+
+            --search-bg: rgba(255, 255, 255, 0.85);
+            --search-border: #ced4da;
+            --search-text: #1a1b1e;
+
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 2. Dark Mode Overrides (System Preference) */
+        @Xmedia (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #050505;
+                --bg-gradient-1: rgba(76, 29, 149, 0.15);
+                --bg-gradient-2: rgba(0, 210, 255, 0.1);
+
+                --card-bg: rgba(255, 255, 255, 0.03);
+                --card-border: rgba(255, 255, 255, 0.08);
+                --card-hover-bg: rgba(255, 255, 255, 0.06);
+
+                --header-bg: rgba(255, 255, 255, 0.02);
+                --header-border: rgba(255, 255, 255, 0.05);
+                --header-hover: rgba(255, 255, 255, 0.04);
+
+                --accent-color: #00d2ff; /* Future Cyan */
+                --accent-glow: rgba(0, 210, 255, 0.3);
+
+                --text-primary: #ffffff;
+                --text-secondary: #888888;
+
+                --search-bg: rgba(20, 20, 20, 0.8);
+                --search-border: rgba(255, 255, 255, 0.08);
+                --search-text: #ffffff;
+
+                --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
+                --shadow-hover: 0 10px 20px rgba(0, 210, 255, 0.1);
+            }
         }
 
         * {
@@ -27,24 +74,24 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             background-image:
-                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(0, 210, 255, 0.1), transparent 25%);
+                radial-gradient(circle at 15% 50%, var(--bg-gradient-1), transparent 25%),
+                radial-gradient(circle at 85% 30%, var(--bg-gradient-2), transparent 25%);
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* Container */
         .container {
             width: 100%;
             max-width: 720px;
             position: relative;
         }
 
-        /* Header */
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -54,7 +101,7 @@
             font-size: 2.5rem;
             font-weight: 800;
             letter-spacing: -0.05em;
-            background: linear-gradient(90deg, #fff, var(--text-secondary));
+            background: linear-gradient(90deg, var(--text-primary), var(--text-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
@@ -67,24 +114,24 @@
             text-transform: uppercase;
         }
 
-        /* Search Bar */
         .search-wrapper {
             position: sticky;
             top: 20px;
             z-index: 100;
             margin-bottom: 40px;
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: var(--shadow-soft);
         }
 
         input#searchInput {
             width: 100%;
             padding: 16px 24px;
             border-radius: 50px;
-            border: 1px solid var(--card-border);
+            border: 1px solid var(--search-border);
             background: var(--search-bg);
-            color: white;
+            color: var(--search-text);
             font-size: 1rem;
             outline: none;
             transition: all 0.3s ease;
@@ -95,21 +142,16 @@
             box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        input#searchInput::placeholder {
-            color: #555;
-        }
-
-        /* Category Section */
         .category-section {
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--header-bg);
+            border: 1px solid var(--header-border);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
         }
 
-        /* Header (Clickable) */
         .category-header {
             display: flex;
             justify-content: space-between;
@@ -121,7 +163,7 @@
         }
 
         .category-header:hover {
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--header-hover);
         }
 
         .category-title {
@@ -142,7 +184,7 @@
             height: 8px;
             background: var(--accent-color);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color);
         }
 
         .toggle-icon {
@@ -151,15 +193,13 @@
             font-size: 0.8rem;
         }
 
-        /* Foldable Content */
         .category-content {
-            max-height: 2000px; /* Arbitrary large height for animation */
+            max-height: 2000px;
             opacity: 1;
             transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
             padding: 0 20px 20px 20px;
         }
 
-        /* Collapsed State */
         .category-section.collapsed .category-content {
             max-height: 0;
             opacity: 0;
@@ -171,7 +211,6 @@
             transform: rotate(-90deg);
         }
 
-        /* Link Cards */
         .link-card {
             display: block;
             text-decoration: none;
@@ -181,7 +220,7 @@
             margin-bottom: 10px;
             border-radius: 12px;
             color: var(--text-primary);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
         }
@@ -191,17 +230,18 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 3px;
+            width: 4px;
             height: 100%;
             background: var(--accent-color);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
 
         .link-card:hover {
-            transform: translateX(5px);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+            background: var(--card-hover-bg);
+            border-color: var(--accent-color);
+            box-shadow: var(--shadow-hover);
         }
 
         .link-card:hover::before {
@@ -211,7 +251,7 @@
         .link-title {
             font-size: 0.95rem;
             line-height: 1.5;
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .link-icon {
@@ -227,15 +267,13 @@
             transform: translateX(0);
         }
 
-        /* Footer */
         footer {
             margin-top: 60px;
-            color: #444;
+            color: var(--text-secondary);
             font-size: 0.8rem;
             text-align: center;
         }
 
-        /* No Results */
         .no-results {
             text-align: center;
             color: var(--text-secondary);
@@ -253,24 +291,23 @@
         </header>
 
         <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="搜尋標題關鍵字（如：美食、男友、醫生...）">
+            <input type="text" id="searchInput" placeholder="搜尋關鍵字...">
         </div>
 
-        <div id="contentArea">
-            <!-- Content injected via JS -->
-        </div>
-
-        <div id="noResults" class="no-results">
-            沒有找到相關結果
-        </div>
+        <div id="contentArea"></div>
+        <div id="noResults" class="no-results">沒有找到</div>
 
         <footer>
-            Designed for Efficiency
+            兔兔、兔兔，得第一
         </footer>
     </div>
 
     <script>
+        // ---------------------------------------------------------
+        // PASTE YOUR JSON DATA HERE
+        // ---------------------------------------------------------
         const data = {
+            // ... [Paste the full JSON object from previous step here] ...
             "萌寵": [
                 { "title": "我自行宣布，第一屆《最肥美家寵》大賽，正式開始", "URL": "https://www.threads.com/@long.zing.ki.xi/post/DQTnG7riYKm" },
                 { "title": "我自行宣布，第一屆《被剪壞的毛孩們》大賽，正式開始", "URL": "https://www.threads.com/@springroll0701/post/DQhh-LykwUb" },
@@ -293,7 +330,7 @@
                 { "title": "我自行宣布，第一屆《跟男生出去遇過最大的 Red Flag 是什麼》大賽，正式開始", "URL": "https://www.threads.com/@kk_krystalllllll/post/DRT3ZP2kZfx" },
                 { "title": "我自行宣布，第一屆《寵老婆》大賽，正式開始", "URL": "https://www.threads.com/@sabina_ch211/post/DR33-aEkY5d" }
             ],
-            "這個好好笑": [
+            "耍笨、好笑": [
                 { "title": "我自行宣布，第一屆《身為醫生、醫護人員遇過的最奇葩病人》大賽，正式開始", "URL": "https://www.threads.com/@kai__1214/post/DRMexYEge1B" },
                 { "title": "我自行宣布，第一屆《失敗攝影展》大賽，正式開始", "URL": "https://www.threads.com/@geomosa/post/DQOXgG1kn4Y" },
                 { "title": "我自行宣布，第一屆《做過最毀三觀的事》大賽，正式開始", "URL": "https://www.threads.com/@_tl.stallone/post/DRGYPH3kqve" },
@@ -306,7 +343,7 @@
                 { "title": "我自行宣布，第一屆《 Threads 史上第一屆未爆出的公司秘密秘》大賽，正式開始", "URL": "https://www.threads.com/@mini826165/post/DQYV0vCEmzn" },
                 { "title": "我自行宣布，第一屆《不小心做過超沒禮貌的事情》大賽，正式開始", "URL": "https://www.threads.com/@sak_9322/post/DRRlVgakmNC" }
             ],
-            "吃喝、推坑": [
+            "好吃、好玩、推坑": [
                 { "title": "我自行宣布，第一屆《這個男優太誇張了》大賽，正式開始", "URL": "https://www.threads.com/@loveintheblanket/post/DQ5xFCujwt3" },
                 { "title": "我自行宣布，第一屆《最難訂位餐廳》大賽，正式開始", "URL": "https://www.threads.com/@inline.app/post/DQ_H9i8j0of" },
                 { "title": "我自行宣布，第一屆《 Threads 好市多必買》大賽，正式開始", "URL": "https://www.threads.com/@bomi.zzz1015/post/DQT4v2FEX1i" },
@@ -345,7 +382,6 @@
             "帥哥、美女": [
                 { "title": "我自行宣布，第一屆《 Threads 史上最正女友/老婆 》大賽，正式開始", "URL": "https://www.threads.com/@gaopei_/post/DQJu5p2knx3" },
                 { "title": "我自行宣布，第一屆《 Threads 史上最好看腳底板》大賽，正式開始", "URL": "https://www.threads.com/@yuan_yuan1126/post/DQQZFdAD9sz" },
-                { "title": "我自行宣布，第一屆《 Threads 穿 CK 史上最傲人》大賽，正式開始", "URL": "https://www.threads.com/@diane.anan/post/DQY8d7akp5I" },
                 { "title": "我自行宣布，第一屆《 CK 內衣》大賽，正式開始", "URL": "https://www.threads.com/@xcute.kaohsiung/post/DRFhjgwE70A" },
                 { "title": "我自行宣布，第一屆《 Threads 童顏巨乳的小隻馬女生》大賽，正式開始", "URL": "https://www.threads.com/@tyu_0318/post/DQiSknOkkLM" },
                 { "title": "我自行宣布，第一屆《手控代表》大賽，正式開始", "URL": "https://www.threads.com/@winni.1014/post/DQg1td4kmkY" }
@@ -356,6 +392,14 @@
         const searchInput = document.getElementById('searchInput');
         const noResults = document.getElementById('noResults');
 
+        // Optional: Monitor Color Scheme Changes (Debug or Logic purposes)
+        if (window.matchMedia) {
+            const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            colorSchemeQuery.addEventListener('change', (e) => {
+                console.log('Color scheme changed to:', e.matches ? 'dark' : 'light');
+            });
+        }
+
         // Function to render the list
         function renderList(filterText = '') {
             contentArea.innerHTML = '';
@@ -363,7 +407,6 @@
             const searchTerm = filterText.toLowerCase();
 
             for (const [category, items] of Object.entries(data)) {
-                // Filter items
                 const filteredItems = items.filter(item =>
                     item.title.toLowerCase().includes(searchTerm)
                 );
@@ -371,11 +414,11 @@
                 if (filteredItems.length > 0) {
                     hasGlobalResults = true;
 
-                    // Create Section Wrapper
+                    // Section
                     const section = document.createElement('div');
                     section.className = 'category-section';
 
-                    // Create Header
+                    // Header
                     const header = document.createElement('div');
                     header.className = 'category-header';
 
@@ -385,17 +428,22 @@
 
                     const toggle = document.createElement('div');
                     toggle.className = 'toggle-icon';
-                    toggle.textContent = '▼'; // Down arrow
+                    toggle.textContent = '▼';
 
                     header.appendChild(title);
                     header.appendChild(toggle);
                     section.appendChild(header);
 
-                    // Create Content Area
+                    // Content
                     const content = document.createElement('div');
                     content.className = 'category-content';
 
-                    // Add click event for folding
+                    // Toggle Logic
+                    // If user is searching, always expand. If not, start expanded (or collapsed if preferred)
+                    if (searchTerm.length > 0) {
+                        section.classList.remove('collapsed');
+                    }
+
                     header.addEventListener('click', () => {
                         section.classList.toggle('collapsed');
                     });
@@ -424,15 +472,11 @@
                     contentArea.appendChild(section);
                 }
             }
-
-            // Show/Hide No Results
             noResults.style.display = hasGlobalResults ? 'none' : 'block';
         }
 
-        // Initial Render
         renderList();
 
-        // Search Listener
         searchInput.addEventListener('input', (e) => {
             renderList(e.target.value);
         });
