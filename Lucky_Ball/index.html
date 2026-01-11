@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科學證實：迷信的力量</title>
+    <style>
+        /* --- 基礎設定 --- */
+        :root {
+            --primary-color: #2e7d32; /* 幸運綠 */
+            --secondary-color: #1565c0; /* 學術藍 */
+            --accent-color: #f57c00; /* 運勢金橘 */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #666666;
+        }
+
+        body {
+            font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- 標題區塊 --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .intro {
+            font-size: 1.2em;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* --- 卡片通用樣式 --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 1.6em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* --- 實驗區塊 (綠色主題) --- */
+        .experiment-card h2 {
+            color: var(--primary-color);
+            border-color: rgba(46, 125, 50, 0.2);
+        }
+
+        .highlight-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .stat-highlight {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        ul.experiment-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.experiment-steps li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+            position: relative;
+        }
+
+        /* --- 姓名學結論區塊 (金色/橘色主題) --- */
+        .conclusion-card {
+            border-top: 5px solid var(--accent-color);
+        }
+
+        .conclusion-card h2 {
+            color: var(--accent-color);
+            border-color: rgba(245, 124, 0, 0.2);
+        }
+
+        .name-points {
+            counter-reset: point-counter;
+        }
+
+        .name-point {
+            margin-bottom: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .name-point::before {
+            counter-increment: point-counter;
+            content: counter(point-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+        }
+
+        .final-thought {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #e65100;
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        /* --- 引用文獻區塊 --- */
+        .references {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .references h3 {
+            color: var(--secondary-color);
+            font-size: 1.1em;
+            margin-top: 0;
+        }
+
+        .ref-list {
+            padding-left: 20px;
+        }
+
+        .ref-list li {
+            margin-bottom: 10px;
+            word-break: break-word; /* 防止長網址破版 */
+        }
+
+        .doi-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .doi-link:hover {
+            text-decoration: underline;
+        }
+
+        /* RWD 調整 */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            h1 { font-size: 1.8em; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>🍀 科學證實：迷信其實是「合法的心理外掛」！</h1>
+        <p class="intro">
+            適度的迷信行為（比如帶個護身符、或是改個好名字）根本就是大腦的<b>「效能加速器」</b>。這不是怪力亂神，而是透過「控制感」來欺騙大腦，讓你表現得比平常更神勇！
+        </p>
+    </header>
+
+    <!-- 實驗區塊 -->
+    <section class="card experiment-card">
+        <h2>⛳️ 經典案例：那一顆「幸運球」的魔力</h2>
+        <p>心理學界最轟動的實驗之一，就是德國科隆大學做的<strong>「幸運高爾夫球」實驗</strong>。</p>
+        
+        <h3>實驗怎麼玩？</h3>
+        <ul class="experiment-steps">
+            <li>👉 <strong>A 組（路人組）：</strong> 拿到球時只聽到一句：「喏，這是給你的球。」</li>
+            <li>👉 <strong>B 組（幸運組）：</strong> 拿到球時被告知：「這是一顆<strong>幸運球（Lucky Ball）</strong>喔！」</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><strong>🔥 結果嚇死人：</strong></p>
+            <p>就只是多了一句「這是幸運球」，B 組的進球率竟然比 A 組 <span class="stat-highlight">高出了 35%！</span></p>
+        </div>
+
+        <p><strong>為什麼會這樣？</strong><br>
+        科學家發現，這叫做<strong>「自我效能感（Self-efficacy）」的激活</strong>。當你相信有「好運」護體時，你的焦慮會降低，自信心爆棚，於是你設定的目標更高、專注力更強，最後真的就「如願以償」了！</p>
+    </section>
+
+    <!-- 結論區塊 -->
+    <section class="card conclusion-card">
+        <h2>🔮 結論：為什麼「姓名學」值得一試？</h2>
+        <p>基於上述的「幸運球」邏輯，我們完全有理由相信<strong>「姓名學」具備極高的心理價值</strong>，甚至比一顆球更有效！</p>
+        
+        <div class="name-points">
+            <div class="name-point">
+                <strong>高頻率的心理暗示</strong><br>
+                名字每天被呼喚無數次。如果一顆球說一次「幸運」就能提升 35% 的表現，那麼一個被你深信「帶有財運、貴人運」的好名字，每一次被叫喚，都是一次強力的<strong>心理暗示（Psychological Suggestion）</strong>。
+            </div>
+            <div class="name-point">
+                <strong>強化控制感</strong><br>
+                在充滿不確定的人生中，擁有一組經過「算計」的好名字，能賦予人們極強的<strong>控制感（Sense of Control）</strong>。這種「我的命運我有把握」的底氣，正是讓你遇事不慌、發揮實力的關鍵。
+            </div>
+            <div class="name-point">
+                <strong>身份認同的重塑</strong><br>
+                改名或取好名，本質上是一種<strong>儀式（Ritual）</strong>。它宣告了舊運氣的結束與新氣象的開始，這種心理上的「重開機」，能有效提升面對挑戰的韌性。
+            </div>
+        </div>
+
+        <div class="final-thought">
+            ❝ 不管運氣是否真的存在，只要你「相信」這個名字能為你帶來好運，你的大腦就會為了證明這一點而全力以赴。在這個層面上，姓名學就是最高級的心理戰術！ ❞
+        </div>
+    </section>
+
+    <!-- 引用文獻區塊 -->
+    <footer class="references">
+        <h3>📚 References (學術引用)</h3>
+        <ol class="ref-list">
+            <li>
+                <strong>The "Lucky Ball" Study (Core Evidence):</strong><br>
+                Damisch, L., Stoberock, B., & Mussweiler, T. (2010). Keep your fingers crossed! How superstition improves performance. <em>Psychological Science</em>, 21(7), 1014–1020. <br>
+                <a href="https://doi.org/10.1177/0956797610372631" target="_blank" class="doi-link">https://doi.org/10.1177/0956797610372631</a>
+            </li>
+            <li>
+                <strong>On Rituals and Anxiety (Mechanism Support):</strong><br>
+                Brooks, A. W., Schroeder, J., Risen, J. L., Gino, F., & Galinsky, A. D. (2016). Don't stop believing: Rituals improve performance by decreasing anxiety. <em>Organizational Behavior and Human Decision Processes</em>, 137, 71–85. <br>
+                <a href="https://doi.org/10.1016/j.obhdp.2016.07.004" target="_blank" class="doi-link">https://doi.org/10.1016/j.obhdp.2016.07.004</a>
+            </li>
+            <li>
+                <strong>On Illusion of Control (Foundational Theory):</strong><br>
+                Langer, E. J. (1975). The illusion of control. <em>Journal of Personality and Social Psychology</em>, 32(2), 311–328. <br>
+                <a href="https://doi.org/10.1037/0022-3514.32.2.311" target="_blank" class="doi-link">https://doi.org/10.1037/0022-3514.32.2.311</a>
+            </li>
+        </ol>
+    </footer>
+
+</div>
+
+</body>
+</html>
