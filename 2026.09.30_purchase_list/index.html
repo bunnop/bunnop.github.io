@@ -20,7 +20,6 @@
     </section>
     <section id="inventory" class="inventory" aria-labelledby="inventory-title">
       <div class="inventory-heading"><h2 id="inventory-title"><span class="section-marker"></span> 採購品項</h2><span class="micro">EQUIPMENT MANIFEST / 001—007</span></div>
-      <div class="toolbar" hidden><div class="filters" role="group" aria-label="依用途篩選"><button type="button" data-filter="all" aria-pressed="true">全部 <span>07</span></button><button type="button" data-filter="compute" aria-pressed="false">運算設備</button><button type="button" data-filter="workspace" aria-pressed="false">顯示與輸入</button><button type="button" data-filter="connect" aria-pressed="false">連接與電源</button></div><label class="sort">排序 <select id="sort"><option value="default">用途順序</option><option value="quantity">數量：多 → 少</option><option value="name">名稱：筆畫順序</option></select></label></div>
       <p class="result-count" aria-live="polite">顯示 7 種品項，共 8 件設備</p>
       <div id="groups">
         <section class="equipment-group" data-group="compute" aria-labelledby="compute-title"><div class="group-heading"><span class="group-index">01 / COMPUTE</span><h3 id="compute-title">運算設備</h3><p>文書處理 · 模型訓練</p><span class="group-total">3 種品項 / 3 件</span></div><div class="cards">
@@ -38,7 +37,7 @@
         </div></section>
       </div>
       <section class="cost-summary" aria-labelledby="cost-title">
-        <div class="cost-heading"><div><p class="eyebrow">BUDGET / TOTAL COST</p><h2 id="cost-title">總計：採購費用</h2></div><p class="cost-scope">全清單估算 · 不隨分類篩選變動</p></div>
+        <div class="cost-heading"><div><p class="eyebrow">BUDGET / TOTAL COST</p><h2 id="cost-title">總計：採購費用</h2></div><p class="cost-scope">全清單估算 · 新臺幣計價</p></div>
         <div class="cost-table-wrap" role="region" aria-label="採購費用明細，可水平捲動" tabindex="0">
           <table class="cost-table">
             <caption class="sr-only">新臺幣單價、採購數量與品項小計；商品名稱連結至價格來源。</caption>
