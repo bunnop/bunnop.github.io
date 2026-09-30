@@ -46,7 +46,7 @@ document.querySelector('.toolbar').hidden = false;
 
 const lightbox = document.querySelector('#lightbox');
 if (typeof lightbox.showModal === 'function') {
-  document.querySelectorAll('.preview').forEach(link => link.addEventListener('click', event => {
+  document.querySelectorAll('a.preview').forEach(link => link.addEventListener('click', event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     const source = link.querySelector('img');

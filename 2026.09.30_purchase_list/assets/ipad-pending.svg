@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" role="img" aria-labelledby="title desc">
+  <title id="title">iPad 型號待確定</title>
+  <desc id="desc">通用平板電腦輪廓示意，非實際商品圖片。</desc>
+  <rect width="640" height="640" fill="#f4f6f1"/>
+  <g fill="none" stroke="#64716a" stroke-width="3">
+    <rect x="170" y="110" width="300" height="390" rx="24"/>
+    <rect x="184" y="134" width="272" height="342" rx="9" stroke="#adb7aa"/>
+    <circle cx="320" cy="122" r="2"/>
+    <path d="M265 289h110m-55-55v110" stroke="#829770"/>
+  </g>
+  <text x="320" y="397" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" letter-spacing="4" fill="#64716a">MODEL / TBD</text>
+  <text x="320" y="555" text-anchor="middle" font-family="Microsoft JhengHei, sans-serif" font-size="20" fill="#52604f">示意圖 · 型號待確定</text>
+</svg>
